@@ -7,6 +7,8 @@ on:
 jobs:
   render-check:
     runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
 
@@ -28,9 +30,69 @@ jobs:
         with:
           path: ./textbook/
 
-      - name: Upload rendered book as artifact
+      - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rendered-book-pr-${{ github.event.number }}
+          name: textbook-pdf-pr-${{ github.event.number }}
+          path: textbook/_book/*.pdf
+          retention-days: 14
+
+      - name: Upload HTML artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: textbook-html-pr-${{ github.event.number }}
           path: textbook/_book/
           retention-days: 14
+
+      - name: Get artifact IDs and post PR comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+            });
+
+            const baseUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/artifacts`;
+
+            const pdfArtifact = artifacts.data.artifacts.find(
+              a => a.name === `textbook-pdf-pr-${context.issue.number}`
+            );
+            const htmlArtifact = artifacts.data.artifacts.find(
+              a => a.name === `textbook-html-pr-${context.issue.number}`
+            );
+
+            const pdfLine = pdfArtifact
+              ? `📄 [Download PDF](${baseUrl}/${pdfArtifact.id})`
+              : '📄 PDF artifact unavailable';
+            const htmlLine = htmlArtifact
+              ? `🌐 [Download HTML](${baseUrl}/${htmlArtifact.id}) _(unzip and open \`index.html\` locally)_`
+              : '🌐 HTML artifact unavailable';
+
+            const body = `📖 **Quarto render succeeded!**\n\n${pdfLine}\n${htmlLine}\n\n> _Updated on every push to this PR. Links expire after 14 days._`;
+
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.data.find(
+              c => c.user.login === 'github-actions[bot]' && c.body.includes('Quarto render succeeded')
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
