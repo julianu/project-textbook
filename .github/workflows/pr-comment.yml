@@ -20,9 +20,19 @@ jobs:
         with:
           script: |
             const runId = context.payload.workflow_run.id;
-            const pr = context.payload.workflow_run.pull_requests[0];
+            const headSha = context.payload.workflow_run.head_sha;
+
+            // Look up the PR by head SHA — works for fork PRs too
+            const prs = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              sort: 'updated',
+              per_page: 20,
+            });
+            const pr = prs.data.find(p => p.head.sha === headSha);
             if (!pr) {
-              console.log('No PR associated, skipping.');
+              console.log(`No open PR found for SHA ${headSha}, skipping.`);
               return;
             }
 
