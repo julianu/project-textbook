@@ -5,12 +5,11 @@ project:
 book:
   title: "EuBIC-MS Textbook"
   author: "EuBIC-MS"
-  date: "5/20/2026"
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
-    - references.qmd
+    - guidelines.qmd
+    - introduction.qmd
+    - authors.qmd
 
 bibliography: references.bib
 
@@ -20,6 +19,3 @@ format:
       - cosmo
   pdf:
     documentclass: scrreprt
-
-
-

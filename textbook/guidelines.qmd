@@ -1,0 +1,53 @@
+# Guidelines
+
+## To contribute, you should familiarize yourself with Quarto and GitHub {.unnumbered}
+
+Quarto is a publishing system that allows you to create books and websites using Markdown.
+If you are already familiar with Markdown, you will find it easy to use Quarto.
+
+To learn more about Quarto books visit <https://quarto.org/docs/books>.
+
+## If you like to contribute work with forks and pull requests {.unnumbered}
+
+Anyone can contribute to the book by forking the repository, making changes, and then submitting a pull request.
+This allows for a collaborative approach to writing and editing the book.
+
+All pull requests will be reviewed and merged by the curators.
+To be merged, a pull request needs at least two approvals from the curators. 
+
+If you start a new chapter or subsection, the curators might ask you to write more if the contribution is minor.
+
+## Lines of text must be wrapped after each sentence {.unnumbered}
+
+This makes it easier to allow for changes in the text without creating merge conflicts.
+
+## If chapter becomes large enough, put it into a folder {.unnumbered}
+
+Chapters that are large enough can be organized into folders, with single files containing the subsections.
+This helps to keep the repository organized and makes it easier to navigate.
+
+## At the beginning of a chapter have a box on "what you should know before reading this chapter" {.unnumbered}
+
+This box should contain links to where to get this knowledge.
+It also helps to set the audience for teh chapter (e.g. rather wetlab or computer scientist)
+
+A chapter can furthermore link to another chapter or its own subsections.
+
+## When you start or want to start on a chapter/subsection, check the discussion {.unnumbered}
+
+If there is a discussion for your topic, join it and indicate your interest.
+Feel free to start a new discussion if you want to write about a topic that is not yet covered.
+
+If you start a new chapter or subsection, don't forget to add a link to it in the `_quarto.yml` respectively the chapter overview.
+
+How to start writing: if you have materials from your teachings/articles - write about it
+
+## Add important terms into the glossary / terminology chapter {.unnumbered}
+
+If you come across important terms that are not yet defined in the glossary, please add them.
+
+## There are two versions of the book: development and published (main) version {.unnumbered}
+
+The development version may contain just bullet points and ideas for new chapters and is not complete, but allows for quick changes and additions.
+
+The published version contains finished chapters and sections, which still can be changed later, but are in a good state for readers.
