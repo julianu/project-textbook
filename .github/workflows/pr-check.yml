@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
@@ -17,7 +17,7 @@ jobs:
           tinytex: true
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.14'
 
@@ -29,16 +29,9 @@ jobs:
         with:
           path: ./textbook/
 
-      - name: Upload PDF artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload rendered book as artifact
+        uses: actions/upload-artifact@v7
         with:
-          name: textbook-pdf-pr-${{ github.event.number }}
-          path: textbook/_book/*.pdf
-          retention-days: 14
-
-      - name: Upload HTML artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: textbook-html-pr-${{ github.event.number }}
+          name: rendered-book-pr-${{ github.event.number }}
           path: textbook/_book/
           retention-days: 14
